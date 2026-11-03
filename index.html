@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Silver Bank | Banca en línea</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Librerías externas: IndexedDB (Dexie) y Excel (SheetJS) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dexie/3.2.4/dexie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+
+  <!-- Fondo animado -->
+  <div class="bg">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <!-- Mensajes emergentes -->
+  <div id="toasts"></div>
+
+
+  <!-- ==================== INICIO ==================== -->
+  <section id="landing" class="vista activa">
+
+    <header class="nav">
+      <div class="logo">◆ Silver<b>Bank</b></div>
+      <div>
+        <button class="btn sec" id="btnRegistro">Abrir cuenta</button>
+        <button class="btn" id="btnIngresar">Iniciar sesión</button>
+      </div>
+    </header>
+
+    <div class="hero">
+      <h1>Tu dinero, <span class="grad">seguro y siempre contigo</span></h1>
+      <p>Consulta tus cuentas, transfiere, paga servicios y solicita productos desde un solo lugar, las 24 horas.</p>
+      <button class="btn grande" id="btnHero">Ingresar a Banca en Línea →</button>
+
+      <div class="stats">
+        <div><b>+250 mil</b>clientes</div>
+        <div><b>24/7</b>disponibilidad</div>
+        <div><b>256 bits</b>cifrado</div>
+      </div>
+    </div>
+
+    <div class="grid servicios">
+      <div class="card hov">
+        <span class="ico">💳</span>
+        <h3>Tarjetas de crédito</h3>
+        <p>Límite de Q4,800 con pago en línea.</p>
+      </div>
+
+      <div class="card hov">
+        <span class="ico">🔁</span>
+        <h3>Transferencias</h3>
+        <p>Entre tus cuentas, a terceros y a otros bancos.</p>
+      </div>
+
+      <div class="card hov">
+        <span class="ico">💡</span>
+        <h3>Pago de servicios</h3>
+        <p>Luz, agua, teléfono, internet y más.</p>
+      </div>
+
+      <div class="card hov">
+        <span class="ico">🐖</span>
+        <h3>Cuenta de ahorro</h3>
+        <p>Abre tu cuenta de ahorro en minutos.</p>
+      </div>
+
+      <div class="card hov">
+        <span class="ico">📄</span>
+        <h3>Estado de cuenta</h3>
+        <p>Descárgalo en Excel cuando quieras.</p>
+      </div>
+
+      <div class="card hov">
+        <span class="ico">🛡️</span>
+        <h3>Seguridad</h3>
+        <p>Tu información protegida en todo momento.</p>
+      </div>
+    </div>
+
+    <footer>© 2026 Silver Bank — Institución ficticia con fines académicos</footer>
+  </section>
+
+
+  <!-- ==================== LOGIN ==================== -->
+  <div id="modalLogin" class="modal">
+    <form id="formLogin" class="card caja">
+      <button type="button" class="cerrar" id="cerrarLogin">✕</button>
+
+      <div class="logo c">◆ Silver<b>Bank</b></div>
+      <h2>Iniciar sesión</h2>
+
+      <label>Usuario
+        <input id="lUser" autocomplete="off" required>
+      </label>
+
+      <label>Contraseña
+        <input id="lPass" type="password" required>
+      </label>
+
+      <button class="btn full">Entrar</button>
+    </form>
+  </div>
+
+
+  <!-- ==================== REGISTRO DE CLIENTE ==================== -->
+  <section id="registro" class="vista centro">
+    <form id="formRegistro" class="card caja ancha">
+
+      <div class="logo c">◆ Silver<b>Bank</b></div>
+      <h2>Registro de cliente</h2>
+      <p class="mut">Completa tus datos para abrir tu cuenta monetaria con tarjeta de débito.</p>
+
+      <div class="cols">
+        <label>Nombres
+          <input name="nombres" required>
+        </label>
+
+        <label>Apellidos
+          <input name="apellidos" required>
+        </label>
+
+        <label>Teléfono
+          <input name="telefono" placeholder="8 dígitos" required>
+        </label>
+
+        <label>Saldo inicial (Q)
+          <input name="saldo" type="number" min="0" step="0.01" required>
+        </label>
+      </div>
+
+      <label>Dirección
+        <input name="direccion" required>
+      </label>
+
+      <button class="btn full">Crear mi cuenta</button>
+    </form>
+  </section>
+
+
+  <!-- ==================== APLICACIÓN ==================== -->
+  <section id="app" class="vista">
+
+    <!-- Menú lateral -->
+    <aside id="sidebar">
+      <div class="logo">◆ Silver<b>Bank</b></div>
+
+      <nav class="menu">
+        <button data-sec="resumen">🏠 Resumen</button>
+        <button data-sec="transferir">🔁 Transferencias</button>
+        <button data-sec="servicios">💡 Pagar servicios</button>
+        <button data-sec="beneficiarios">👥 Beneficiarios</button>
+        <button data-sec="productos">🆕 Solicitar productos</button>
+        <button data-sec="historial">📊 Historial</button>
+        <button data-sec="estado">📄 Estado de cuenta</button>
+        <button data-sec="perfil">👤 Mi perfil</button>
+        <button id="btnSalir" class="salir">⏻ Cerrar sesión</button>
+      </nav>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main>
+      <button id="btnMenu" class="btn sec">☰</button>
+
+      <!-- Resumen -->
+      <div id="resumen" class="sec"></div>
+
+      <!-- Transferencias -->
+      <div id="transferir" class="sec">
+        <h2>Transferencias</h2>
+
+        <form id="formTransf" class="card cols">
+          <label>Tipo
+            <select id="tTipo">
+              <option value="propia">Entre mis cuentas</option>
+              <option value="tercero">A terceros (Silver Bank)</option>
+              <option value="otro">A otro banco (comisión Q5.00)</option>
+            </select>
+          </label>
+
+          <label>Cuenta origen
+            <select id="tOrigen"></select>
+          </label>
+
+          <label>Cuenta destino
+            <select id="tDestino"></select>
+          </label>
+
+          <label>Monto (Q)
+            <input id="tMonto" type="number" min="0.01" step="0.01" required>
+          </label>
+
+          <label class="todo">Descripción
+            <input id="tDesc" placeholder="Opcional">
+          </label>
+
+          <button class="btn">Transferir</button>
+        </form>
+      </div>
+
+      <!-- Pago de servicios -->
+      <div id="servicios" class="sec">
+        <h2>Pago de servicios</h2>
+
+        <form id="formServ" class="card cols">
+          <label>Servicio
+            <select id="sServ"></select>
+          </label>
+
+          <label id="lRef">Referencia
+            <input id="sRef">
+          </label>
+
+          <label>Pagar desde
+            <select id="sOrigen"></select>
+          </label>
+
+          <label>Monto (Q)
+            <input id="sMonto" type="number" min="0.01" step="0.01" required>
+          </label>
+
+          <p id="sInfo" class="mut todo"></p>
+
+          <button class="btn">Pagar</button>
+        </form>
+      </div>
+
+      <!-- Beneficiarios / agregar cuentas -->
+      <div id="beneficiarios" class="sec">
+        <h2>Beneficiarios y cuentas de terceros</h2>
+
+        <form id="formBen" class="card cols">
+          <label>Nombre
+            <input id="bNombre" required>
+          </label>
+
+          <label>Banco
+            <select id="bBanco">
+              <option>Silver Bank</option>
+              <option>Banrural</option>
+              <option>BAC Credomatic</option>
+              <option>Banco Industrial</option>
+              <option>G&amp;T Continental</option>
+              <option>Otro</option>
+            </select>
+          </label>
+
+          <label>No. de cuenta
+            <input id="bNum" required>
+          </label>
+
+          <button class="btn">Agregar cuenta</button>
+        </form>
+
+        <div id="listaBen" class="grid"></div>
+      </div>
+
+      <!-- Solicitar productos -->
+      <div id="productos" class="sec">
+        <h2>Solicitar productos</h2>
+
+        <div class="grid">
+          <div class="card hov">
+            <span class="ico">🐖</span>
+            <h3>Cuenta de ahorro</h3>
+            <p>Hazla crecer con un depósito inicial.</p>
+            <button class="btn" data-prod="Ahorro">Solicitar</button>
+          </div>
+
+          <div class="card hov">
+            <span class="ico">💳</span>
+            <h3>Tarjeta de crédito</h3>
+            <p>Límite de Q4,800.</p>
+            <button class="btn" data-prod="Tarjeta de crédito">Solicitar</button>
+          </div>
+        </div>
+
+        <form id="formProd" class="card cols" hidden></form>
+      </div>
+
+      <!-- Historial -->
+      <div id="historial" class="sec">
+        <h2>Historial de movimientos</h2>
+
+        <div class="card cols">
+          <label>Cuenta
+            <select id="hCuenta"></select>
+          </label>
+
+          <label>Tipo
+            <select id="hTipo"></select>
+          </label>
+        </div>
+
+        <div id="hResumen" class="grid"></div>
+        <div id="hTabla" class="card tabla"></div>
+      </div>
+
+      <!-- Estado de cuenta -->
+      <div id="estado" class="sec">
+        <h2>Estado de cuenta</h2>
+
+        <div class="card cols">
+          <label>Cuenta
+            <select id="eCuenta"></select>
+          </label>
+
+          <label>Desde
+            <input type="date" id="eDesde">
+          </label>
+
+          <label>Hasta
+            <input type="date" id="eHasta">
+          </label>
+
+          <button class="btn" id="btnExcel">⬇ Descargar Excel</button>
+        </div>
+
+        <div id="ePrev" class="card tabla"></div>
+      </div>
+
+      <!-- Perfil -->
+      <div id="perfil" class="sec">
+        <h2>Mi perfil</h2>
+
+        <form id="formPerfil" class="card cols">
+          <label>Nombres
+            <input name="nombres" required>
+          </label>
+
+          <label>Apellidos
+            <input name="apellidos" required>
+          </label>
+
+          <label>Teléfono
+            <input name="telefono" required>
+          </label>
+
+          <label>Dirección
+            <input name="direccion" required>
+          </label>
+
+          <p id="pDesde" class="mut todo"></p>
+
+          <button class="btn">Guardar cambios</button>
+          <button type="button" class="btn peligro" id="btnReset">Borrar todos los datos</button>
+        </form>
+      </div>
+    </main>
+  </section>
+  <!-- ==================== COMPROBANTE DE TRANSFERENCIA ==================== -->
+  <div id="modalVoucher" class="modal">
+    <div id="voucher" class="card caja voucher"></div>
+  </div>
+
+</body>
+
+
+</html>

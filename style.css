@@ -1,0 +1,726 @@
+/* ==================== VARIABLES Y BASE ==================== */
+:root {
+  --azul: #1e6fff;
+  --cian: #2de2e6;
+  --plata: #c9d3e3;
+  --card: rgba(255, 255, 255, .07);
+  --borde: rgba(255, 255, 255, .14);
+  --ok: #2ecc71;
+  --mal: #ff5d6c;
+  --tx: #eaf0fb;
+  --mut: #9fb0cc;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: var(--tx);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient(125deg, #050b1a, #0b1f4a, #0a2a5e, #06122b);
+  background-size: 400% 400%;
+  animation: fondo 20s ease infinite;
+}
+
+@keyframes fondo {
+  0%, 100% { background-position: 0 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+
+/* ==================== FONDO ANIMADO ==================== */
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Cuadrícula sutil */
+.bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, .04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Esferas de luz flotantes */
+.bg span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .35;
+  animation: flota 18s ease-in-out infinite;
+}
+
+.bg span:nth-child(1) {
+  width: 420px;
+  height: 420px;
+  background: #1e6fff;
+  left: -100px;
+  top: 5%;
+}
+
+.bg span:nth-child(2) {
+  width: 340px;
+  height: 340px;
+  background: #2de2e6;
+  right: -80px;
+  top: 30%;
+  animation-delay: -5s;
+}
+
+.bg span:nth-child(3) {
+  width: 300px;
+  height: 300px;
+  background: #7a8cff;
+  left: 35%;
+  bottom: -100px;
+  animation-delay: -9s;
+}
+
+.bg span:nth-child(4) {
+  width: 220px;
+  height: 220px;
+  background: #c9d3e3;
+  right: 25%;
+  top: -60px;
+  opacity: .15;
+  animation-delay: -13s;
+}
+
+@keyframes flota {
+  50% { transform: translate(70px, -90px) scale(1.25); }
+}
+
+
+/* ==================== VISTAS Y SECCIONES ==================== */
+.vista,
+.sec {
+  display: none;
+}
+
+.vista.activa {
+  display: block;
+  animation: entra .5s ease;
+}
+
+.sec.activa {
+  display: block;
+  animation: entra .4s ease;
+}
+
+.vista.centro.activa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+@keyframes entra {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+
+/* ==================== LOGO Y TEXTOS ==================== */
+.logo {
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 1px;
+  color: var(--plata);
+}
+
+.logo b {
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--cian), var(--azul));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.logo.c {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.grad {
+  background: linear-gradient(90deg, var(--cian), var(--azul), #9db4ff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.mut {
+  color: var(--mut);
+}
+
+
+/* ==================== PÁGINA DE INICIO ==================== */
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 5%;
+  backdrop-filter: blur(10px);
+}
+
+.hero {
+  text-align: center;
+  padding: 70px 5% 50px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.15;
+  margin-bottom: 18px;
+}
+
+.hero p {
+  color: var(--mut);
+  font-size: 1.15rem;
+  margin-bottom: 28px;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+  color: var(--mut);
+}
+
+.stats b {
+  display: block;
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+footer {
+  text-align: center;
+  color: var(--mut);
+  padding: 30px;
+  font-size: .85rem;
+}
+
+
+/* ==================== TARJETAS Y REJILLAS ==================== */
+.card {
+  background: var(--card);
+  border: 1px solid var(--borde);
+  border-radius: 18px;
+  padding: 22px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .3);
+  margin-bottom: 18px;
+}
+
+.card h3 {
+  margin-bottom: 6px;
+}
+
+.card p {
+  color: var(--mut);
+  margin-bottom: 12px;
+}
+
+/* Efecto al pasar el mouse */
+.hov {
+  transition: .3s;
+}
+
+.hov:hover {
+  transform: translateY(-6px);
+  border-color: var(--cian);
+  box-shadow: 0 15px 45px rgba(45, 226, 230, .18);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.servicios {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.servicios .card {
+  margin: 0;
+}
+
+.ico {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+
+/* ==================== BOTONES ==================== */
+.btn {
+  position: relative;
+  overflow: hidden;
+  border: 0;
+  cursor: pointer;
+  padding: 11px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: .95rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--azul), #0b4fd1);
+  box-shadow: 0 6px 20px rgba(30, 111, 255, .35);
+  transition: .25s;
+}
+
+.btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 10px 28px rgba(45, 226, 230, .35);
+}
+
+.btn:active {
+  transform: scale(.97);
+}
+
+/* Brillo que cruza el botón */
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .35), transparent);
+  transform: skewX(-20deg);
+  transition: .6s;
+}
+
+.btn:hover::after {
+  left: 140%;
+}
+
+.btn.sec {
+  background: transparent;
+  border: 1px solid var(--plata);
+  box-shadow: none;
+}
+
+.btn.peligro {
+  background: linear-gradient(135deg, #ff5d6c, #c9283a);
+}
+
+.btn.grande {
+  padding: 15px 34px;
+  font-size: 1.1rem;
+}
+
+.btn.full {
+  width: 100%;
+  margin-top: 10px;
+}
+
+
+/* ==================== FORMULARIOS ==================== */
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: .85rem;
+  color: var(--plata);
+  margin-bottom: 12px;
+}
+
+input,
+select {
+  padding: 11px 13px;
+  border-radius: 10px;
+  border: 1px solid var(--borde);
+  background: rgba(5, 11, 26, .6);
+  color: #fff;
+  font-size: .95rem;
+  outline: 0;
+  transition: .2s;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--cian);
+  box-shadow: 0 0 0 3px rgba(45, 226, 230, .2);
+}
+
+option {
+  background: #0b1f4a;
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 4px 16px;
+  align-items: end;
+}
+
+.todo {
+  grid-column: 1 / -1;
+}
+
+
+/* ==================== LOGIN (MODAL) Y REGISTRO ==================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 6, 16, .7);
+  backdrop-filter: blur(6px);
+  z-index: 50;
+}
+
+.modal.abierto {
+  display: flex;
+}
+
+.caja {
+  width: min(400px, 92vw);
+  position: relative;
+  animation: entra .4s;
+}
+
+.caja.ancha {
+  width: min(640px, 94vw);
+}
+
+.caja h2 {
+  margin: 6px 0 16px;
+  text-align: center;
+}
+
+.cerrar {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+  background: none;
+  border: 0;
+  color: var(--mut);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Animación de error en el login */
+.sacude {
+  animation: sac .4s;
+}
+
+@keyframes sac {
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+
+/* ==================== APLICACIÓN: MENÚ LATERAL ==================== */
+#app.activa {
+  display: flex;
+  min-height: 100vh;
+}
+
+#sidebar {
+  width: 250px;
+  padding: 24px 16px;
+  background: rgba(5, 11, 26, .65);
+  backdrop-filter: blur(18px);
+  border-right: 1px solid var(--borde);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 28px;
+}
+
+.menu button {
+  background: none;
+  border: 0;
+  color: var(--plata);
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: .95rem;
+  transition: .2s;
+}
+
+.menu button:hover {
+  background: rgba(255, 255, 255, .08);
+  transform: translateX(5px);
+}
+
+.menu button.on {
+  background: linear-gradient(90deg, rgba(30, 111, 255, .5), transparent);
+  color: #fff;
+  border-left: 3px solid var(--cian);
+}
+
+.menu .salir {
+  margin-top: 20px;
+  color: var(--mal);
+}
+
+main {
+  flex: 1;
+  padding: 30px 4%;
+  min-width: 0;
+}
+
+main h2 {
+  margin-bottom: 18px;
+}
+
+#btnMenu {
+  display: none;
+  margin-bottom: 14px;
+}
+
+
+/* ==================== TARJETAS DE CUENTA ==================== */
+.tarjeta {
+  border-radius: 18px;
+  padding: 22px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  transition: .3s;
+  background: linear-gradient(135deg, #1e6fff, #0a2a8a);
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px) rotate(-.5deg);
+}
+
+.tarjeta.Ahorro {
+  background: linear-gradient(135deg, #12a37f, #0a5a62);
+}
+
+.tarjeta.credito {
+  background: linear-gradient(135deg, #6b7a99, #262f44);
+}
+
+.tarjeta::after {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .12);
+}
+
+.tarjeta small {
+  opacity: .8;
+}
+
+.tarjeta .monto {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 8px 0;
+}
+
+.kpi {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--cian);
+}
+
+
+/* ==================== TABLAS Y ETIQUETAS ==================== */
+.tabla {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+}
+
+th {
+  text-align: left;
+  color: var(--mut);
+  font-weight: 600;
+  padding: 10px;
+  border-bottom: 1px solid var(--borde);
+}
+
+td {
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+tr:hover td {
+  background: rgba(255, 255, 255, .04);
+}
+
+.neg { color: var(--mal); }
+.pos { color: var(--ok); }
+
+.badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .75rem;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, .12);
+}
+
+.b-gasto  { background: rgba(255, 160, 40, .25);  color: #ffbe5c; }
+.b-serv   { background: rgba(45, 226, 230, .2);   color: var(--cian); }
+.b-transf { background: rgba(122, 140, 255, .25); color: #aab6ff; }
+.b-dep    { background: rgba(46, 204, 113, .2);   color: var(--ok); }
+
+
+/* ==================== MENSAJES EMERGENTES ==================== */
+#toasts {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  padding: 14px 20px;
+  border-radius: 12px;
+  color: #fff;
+  backdrop-filter: blur(10px);
+  animation: entra .3s;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, .4);
+}
+
+.toast.ok  { background: rgba(46, 204, 113, .9); }
+.toast.mal { background: rgba(255, 93, 108, .92); }
+
+
+/* ==================== RESPONSIVO (CELULAR) ==================== */
+@media (max-width: 800px) {
+  #sidebar {
+    position: fixed;
+    left: -270px;
+    z-index: 40;
+    transition: .3s;
+  }
+
+  #sidebar.abierto {
+    left: 0;
+  }
+
+  #btnMenu {
+    display: inline-block;
+  }
+  /* ==================== COMPROBANTE (VOUCHER) ==================== */
+.voucher {
+  background: #f7f9fd;
+  color: #0b1f4a;
+  width: min(420px, 92vw);
+  max-height: 92vh;
+  overflow-y: auto;
+  text-align: center;
+  padding: 26px;
+}
+
+.voucher .check {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: var(--ok);
+  color: #fff;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pop .5s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(0); }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.voucher .monto-g {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 6px 0 14px;
+}
+
+.voucher .linea {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #b9c4d8;
+  font-size: .9rem;
+  text-align: left;
+}
+
+.voucher .linea span {
+  color: #5b6b8c;
+}
+
+.voucher .linea b {
+  text-align: right;
+  word-break: break-word;
+}
+
+.voucher .acciones {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.voucher .acciones .btn {
+  flex: 1;
+}
+
+.voucher .btn.sec {
+  color: #0b1f4a;
+  border-color: #0b1f4a;
+}
+
+/* Al imprimir solo se muestra el comprobante */
+@media print {
+  body > *:not(#modalVoucher) {
+    display: none !important;
+  }
+
+  #modalVoucher {
+    position: static;
+    background: #fff;
+  }
+
+  .voucher {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+
+  .voucher .acciones {
+    display: none;
+  }
+}
+}
